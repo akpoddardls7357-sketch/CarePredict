@@ -1,8 +1,6 @@
 "use client";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
 import { ChangeEvent, DragEvent, useRef, useState } from "react";
 
@@ -73,7 +71,6 @@ function getDecisionSupport(
     factors: factorNames,
   };
 }
-
 
 type PatientData = {
   race: string;
@@ -204,6 +201,10 @@ export default function Home() {
   const [uploadResult, setUploadResult] = useState<UploadResult | null>(null);
 
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+
+  const heroRiskPercentage = prediction?.risk_percentage ?? 59.8;
+  const heroRiskLevel = prediction?.risk_level ?? "High Risk";
+  const heroThreshold = prediction?.threshold ?? 0.51;
 
   const [explanation, setExplanation] = useState<ExplanationResult | null>(
     null,
@@ -509,34 +510,49 @@ export default function Home() {
                   </div>
 
                   <div className="rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-600">
-                    HIGH RISK
+                    {heroRiskLevel.toUpperCase()}
                   </div>
                 </div>
 
                 <div className="my-8 flex justify-center">
-                  <div className="relative flex h-48 w-48 items-center justify-center rounded-full border-[18px] border-red-100">
-                    <div className="absolute inset-0 rounded-full border-[18px] border-transparent border-t-red-500 border-r-red-500 rotate-[-35deg]" />
+                  <div
+                    className="relative h-48 w-48 rounded-full p-[18px]"
+                    style={{
+                      background: `conic-gradient(
+                          #ef4444 ${Math.min(heroRiskPercentage, 100)}%,
+                          #fee2e2 0
+                        )`,
+                    }}
+                  >
+                    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center rounded-full bg-white text-center">
+                      <p className="text-5xl font-bold leading-none text-slate-900">
+                        {heroRiskPercentage.toFixed(1)}%
+                      </p>
 
-                    <div className="text-center">
-                      <p className="text-5xl font-bold text-slate-900">59.8%</p>
-
-                      <p className="mt-1 text-sm text-slate-500">
+                      <p className="mt-2 text-sm text-slate-500">
                         predicted probability
                       </p>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">Decision threshold</span>
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-500">Decision threshold</span>
 
-                    <span className="font-semibold">51%</span>
-                  </div>
+                  <span className="font-semibold">
+                    {(heroThreshold * 100).toFixed(0)}%
+                  </span>
+                </div>
 
-                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
-                    <div className="h-full w-[60%] rounded-full bg-red-500" />
-                  </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
+                  <div
+                    className="h-full rounded-full bg-red-500"
+                    style={{
+                      width: `${Math.min(heroRiskPercentage, 100)}%`,
+                    }}
+                  />
                 </div>
               </div>
             </div>
