@@ -9,3 +9,4 @@ shap
 joblib
 PyMuPDF
 Pillow
+pytesseract
