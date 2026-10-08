@@ -405,7 +405,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h1 className="text-xl font-bold tracking-tight">CarePredict</h1>
+              <h1 className="text-xl font-bold tracking-tight">CareSight AI</h1>
 
               <p className="text-xs text-slate-500">
                 Predictive Healthcare Analytics
