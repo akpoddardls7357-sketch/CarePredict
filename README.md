@@ -1,4 +1,4 @@
-# CarePredict
+# CareSigh AI
 
 ## Predictive Analytics Dashboard for Value-Based Healthcare
 
